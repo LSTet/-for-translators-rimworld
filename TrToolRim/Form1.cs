@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -13,34 +15,75 @@ namespace TrToolRim
             InitializeComponent();
         }
 
-        private void btnOpen_Click(object sender, EventArgs e)
+        private void btnOpenFolder_Click(object sender, EventArgs e)
         {
-            if (openFileDialog == null)
-                openFileDialog = new OpenFileDialog();
-
-            openFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                currentFilePath = openFileDialog.FileName;
-                XmlDocument doc = new XmlDocument();
-                doc.Load(currentFilePath);
+                string selectedFolderPath = folderBrowserDialog.SelectedPath;
+                LoadFolders(selectedFolderPath);
+                LoadFiles(selectedFolderPath);
+            }
+        }
 
-                if (dataGridView == null)
-                    throw new NullReferenceException("dataGridView is not initialized.");
+        private void LoadFolders(string selectedFolderPath)
+        {
+            checkedListBoxFolders.Items.Clear();
+            string[] directories = Directory.GetDirectories(selectedFolderPath, "*", SearchOption.AllDirectories);
+            foreach (string dir in directories)
+            {
+                checkedListBoxFolders.Items.Add(dir);
+            }
+        }
 
-                dataGridView.Rows.Clear();
-                dataGridView.Columns.Clear();
-                dataGridView.Columns.Add("Tag", "Tag");
-                dataGridView.Columns.Add("Value", "Value");
+        private void LoadFiles(string selectedFolderPath)
+        {
+            listBoxFiles.Items.Clear();
+            var ignoredFolders = checkedListBoxFolders.CheckedItems.Cast<string>().ToList();
+            string[] xmlFiles = Directory.GetFiles(selectedFolderPath, "*.xml", SearchOption.AllDirectories);
 
-                foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+            foreach (string file in xmlFiles)
+            {
+                bool shouldIgnore = ignoredFolders.Any(ignored => IsSubDirectory(ignored, file));
+                if (!shouldIgnore)
                 {
-                    if (node.NodeType == XmlNodeType.Element)
-                    {
-                        string tagName = node.Name;
-                        string tagValue = node.InnerText;
-                        dataGridView.Rows.Add(tagName, tagValue);
-                    }
+                    listBoxFiles.Items.Add(file);
+                }
+            }
+        }
+
+        private bool IsSubDirectory(string parentDir, string childPath)
+        {
+            var parentUri = new Uri(parentDir.EndsWith("\\") ? parentDir : parentDir + "\\");
+            var childUri = new Uri(childPath);
+            return parentUri.IsBaseOf(childUri);
+        }
+
+        private void listBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxFiles.SelectedItem != null)
+            {
+                currentFilePath = listBoxFiles.SelectedItem.ToString();
+                LoadXmlFile(currentFilePath);
+            }
+        }
+
+        private void LoadXmlFile(string filePath)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+
+            dataGridView.Rows.Clear();
+            dataGridView.Columns.Clear();
+            dataGridView.Columns.Add("Tag", "Tag");
+            dataGridView.Columns.Add("Value", "Value");
+
+            foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+            {
+                if (node.NodeType == XmlNodeType.Element)
+                {
+                    string tagName = node.Name;
+                    string tagValue = node.InnerText;
+                    dataGridView.Rows.Add(tagName, tagValue);
                 }
             }
         }
@@ -82,14 +125,17 @@ namespace TrToolRim
             }
         }
 
+        private void btnUpdateFiles_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(folderBrowserDialog.SelectedPath))
+            {
+                LoadFiles(folderBrowserDialog.SelectedPath);
+            }
+        }
+
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://discord.gg/Hwen3TjJ7Q");
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

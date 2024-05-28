@@ -3,37 +3,41 @@
     partial class Form1
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.Button btnOpenFolder;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.DataGridView dataGridView;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.LinkLabel linkLabel1;  // Добавляем LinkLabel
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.ListBox listBoxFiles;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckedListBox checkedListBoxFolders;
+        private System.Windows.Forms.Button btnUpdateFiles;
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.btnOpen = new System.Windows.Forms.Button();
+            this.btnOpenFolder = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.listBoxFiles = new System.Windows.Forms.ListBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.checkedListBoxFolders = new System.Windows.Forms.CheckedListBox();
+            this.btnUpdateFiles = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnOpen
+            // btnOpenFolder
             // 
-            this.btnOpen.Location = new System.Drawing.Point(12, 54);
-            this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(75, 23);
-            this.btnOpen.TabIndex = 0;
-            this.btnOpen.Text = "Open";
-            this.btnOpen.UseVisualStyleBackColor = true;
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            this.btnOpenFolder.Location = new System.Drawing.Point(13, 13);
+            this.btnOpenFolder.Name = "btnOpenFolder";
+            this.btnOpenFolder.Size = new System.Drawing.Size(100, 23);
+            this.btnOpenFolder.TabIndex = 0;
+            this.btnOpenFolder.Text = "Open Folder";
+            this.btnOpenFolder.UseVisualStyleBackColor = true;
+            this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(707, 54);
+            this.btnSave.Location = new System.Drawing.Point(713, 13);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 1;
@@ -44,15 +48,23 @@
             // dataGridView
             // 
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(15, 83);
+            this.dataGridView.Location = new System.Drawing.Point(12, 384);
             this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(775, 425);
+            this.dataGridView.Size = new System.Drawing.Size(775, 211);
             this.dataGridView.TabIndex = 2;
+            // 
+            // listBoxFiles
+            // 
+            this.listBoxFiles.Location = new System.Drawing.Point(12, 283);
+            this.listBoxFiles.Name = "listBoxFiles";
+            this.listBoxFiles.Size = new System.Drawing.Size(775, 95);
+            this.listBoxFiles.TabIndex = 4;
+            this.listBoxFiles.SelectedIndexChanged += new System.EventHandler(this.listBoxFiles_SelectedIndexChanged);
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 511);
+            this.linkLabel1.Location = new System.Drawing.Point(10, 598);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(192, 13);
             this.linkLabel1.TabIndex = 3;
@@ -60,34 +72,42 @@
             this.linkLabel1.Text = "Join our Discord community for support!";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // textBox1
+            // checkedListBoxFolders
             // 
-            this.textBox1.Location = new System.Drawing.Point(15, 12);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(767, 36);
-            this.textBox1.TabIndex = 4;
-            this.textBox1.Text = resources.GetString("textBox1.Text");
+            this.checkedListBoxFolders.FormattingEnabled = true;
+            this.checkedListBoxFolders.Location = new System.Drawing.Point(12, 42);
+            this.checkedListBoxFolders.Name = "checkedListBoxFolders";
+            this.checkedListBoxFolders.Size = new System.Drawing.Size(774, 229);
+            this.checkedListBoxFolders.TabIndex = 5;
+            // 
+            // btnUpdateFiles
+            // 
+            this.btnUpdateFiles.Location = new System.Drawing.Point(120, 13);
+            this.btnUpdateFiles.Name = "btnUpdateFiles";
+            this.btnUpdateFiles.Size = new System.Drawing.Size(100, 23);
+            this.btnUpdateFiles.TabIndex = 6;
+            this.btnUpdateFiles.Text = "Update Files";
+            this.btnUpdateFiles.UseVisualStyleBackColor = true;
+            this.btnUpdateFiles.Click += new System.EventHandler(this.btnUpdateFiles_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 533);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(800, 620);
+            this.Controls.Add(this.btnUpdateFiles);
+            this.Controls.Add(this.checkedListBoxFolders);
+            this.Controls.Add(this.listBoxFiles);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.btnOpen);
+            this.Controls.Add(this.btnOpenFolder);
             this.Controls.Add(this.linkLabel1);
             this.Name = "Form1";
-            this.Text = "TrToolRim";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Text = "RimWorld Mod Translator";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
-
-        private System.Windows.Forms.TextBox textBox1;
     }
 }
