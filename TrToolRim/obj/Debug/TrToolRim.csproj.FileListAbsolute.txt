@@ -1,0 +1,10 @@
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\obj\Debug\TrToolRim.csproj.AssemblyReference.cache
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\obj\Debug\TrToolRim.Properties.Resources.resources
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\obj\Debug\TrToolRim.csproj.GenerateResource.cache
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\obj\Debug\TrToolRim.csproj.CoreCompileInputs.cache
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\bin\Debug\TrToolRim.exe.config
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\bin\Debug\TrToolRim.exe
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\bin\Debug\TrToolRim.pdb
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\obj\Debug\TrToolRim.exe
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\obj\Debug\TrToolRim.pdb
+I:\Личные проэкты\-for-translators-rimworld\TrToolRim\obj\Debug\TrToolRim.Form1.resources
