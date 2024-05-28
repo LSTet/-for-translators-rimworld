@@ -120,6 +120,9 @@
   <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>Open the folder with the mod and open the xml file, then you can edit the translation, I advise you to create a backup copy of the original, in some cases there is merged text, I don’t recommend touching it because this is a tag for the game. This field can be used for temporary notes</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>
   </metadata>
