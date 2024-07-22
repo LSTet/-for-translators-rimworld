@@ -20,8 +20,77 @@ namespace TrToolRim
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 string selectedFolderPath = folderBrowserDialog.SelectedPath;
+                CreateLanguageDirectories(selectedFolderPath);
                 LoadFolders(selectedFolderPath);
                 LoadFiles(selectedFolderPath);
+            }
+        }
+
+        private void CreateLanguageDirectories(string selectedFolderPath)
+        {
+            var defsDirs = Directory.GetDirectories(selectedFolderPath, "Defs", SearchOption.AllDirectories);
+            foreach (var defsDir in defsDirs)
+            {
+                string languageDir = Path.Combine(Path.GetDirectoryName(defsDir), "Languages", "Russian", "DefInjected");
+                Directory.CreateDirectory(languageDir);
+
+                foreach (var file in Directory.GetFiles(defsDir, "*.xml", SearchOption.AllDirectories))
+                {
+                    ProcessXmlFile(file, languageDir);
+                }
+            }
+        }
+
+        private void ProcessXmlFile(string filePath, string outputDir)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+
+            bool hasLabelOrDescription = false;
+
+            foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+            {
+                if (node.SelectSingleNode("label") != null || node.SelectSingleNode("description") != null)
+                {
+                    hasLabelOrDescription = true;
+                    break;
+                }
+            }
+
+            if (hasLabelOrDescription)
+            {
+                string fileName = Path.GetFileName(filePath);
+                string newFilePath = Path.Combine(outputDir, fileName);
+
+                XmlDocument newDoc = new XmlDocument();
+                XmlElement rootElement = newDoc.CreateElement("LanguageData");
+                newDoc.AppendChild(rootElement);
+
+                foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+                {
+                    string defName = node["defName"]?.InnerText;
+                    if (defName != null)
+                    {
+                        XmlNode labelNode = node.SelectSingleNode("label");
+                        XmlNode descriptionNode = node.SelectSingleNode("description");
+
+                        if (labelNode != null)
+                        {
+                            XmlElement labelElement = newDoc.CreateElement($"{defName}.label");
+                            labelElement.InnerText = labelNode.InnerText;
+                            rootElement.AppendChild(labelElement);
+                        }
+
+                        if (descriptionNode != null)
+                        {
+                            XmlElement descriptionElement = newDoc.CreateElement($"{defName}.description");
+                            descriptionElement.InnerText = descriptionNode.InnerText;
+                            rootElement.AppendChild(descriptionElement);
+                        }
+                    }
+                }
+
+                newDoc.Save(newFilePath);
             }
         }
 
@@ -43,19 +112,11 @@ namespace TrToolRim
 
             foreach (string file in xmlFiles)
             {
-                bool shouldIgnore = ignoredFolders.Any(ignored => IsSubDirectory(ignored, file));
-                if (!shouldIgnore)
+                if (!ignoredFolders.Any(ignored => file.StartsWith(ignored)))
                 {
                     listBoxFiles.Items.Add(file);
                 }
             }
-        }
-
-        private bool IsSubDirectory(string parentDir, string childPath)
-        {
-            var parentUri = new Uri(parentDir.EndsWith("\\") ? parentDir : parentDir + "\\");
-            var childUri = new Uri(childPath);
-            return parentUri.IsBaseOf(childUri);
         }
 
         private void listBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
@@ -71,6 +132,9 @@ namespace TrToolRim
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(filePath);
+
+            if (dataGridView == null)
+                throw new NullReferenceException("dataGridView is not initialized.");
 
             dataGridView.Rows.Clear();
             dataGridView.Columns.Clear();
